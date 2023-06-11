@@ -1,9 +1,11 @@
 import FormFunctions.MD5;
+import FormFunctions.MyMail;
 import FormFunctions.SignIn.SignInFunctions;
 import FormFunctions.Validate;
 import Main.SQLConnections;
 import Main.showMessage;
 
+import javax.mail.MessagingException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +28,6 @@ public class SignUp extends JFrame{
     private JLabel email_label;
     private JTextField email;
     private JButton addUser;
-    private JButton getCode;
     private JComboBox<String> language_box;
     private JButton btnLang;
     private JLabel password_label;
@@ -51,7 +52,7 @@ public class SignUp extends JFrame{
 
 
         // Event Listener to get the code of the selected country
-        getCode.addActionListener(new ActionListener() {
+        country.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 country_code.setText(mp.get(country.getSelectedItem()));
@@ -78,6 +79,14 @@ public class SignUp extends JFrame{
                         throw new RuntimeException(ex);
                     }
 
+                    try {
+                        MyMail.sendEmail(email.getText(),
+                                "Welcome To ABC Bank",
+                                "Hello User! Welcome to the ABC Bank");
+                    } catch (MessagingException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
 
                 }
                 else {
@@ -96,7 +105,6 @@ public class SignUp extends JFrame{
                 country_label.setText(r.getString("SignUp.country_label"));
                 contact_label.setText(r.getString("SignUp.contact_label"));
                 email_label.setText(r.getString("SignUp.email_label"));
-                getCode.setText(r.getString("SignUp.getCode"));
                 addUser.setText(r.getString("SignUp.addUser"));
                 btnLang.setText(r.getString("SignUp.btnLang"));
                 password_label.setText(r.getString("SignUp.password_label"));
