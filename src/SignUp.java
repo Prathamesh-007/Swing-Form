@@ -2,14 +2,14 @@ import FormFunctions.MD5;
 import FormFunctions.MyMail;
 import FormFunctions.SignIn.SignInFunctions;
 import FormFunctions.Validate;
-import Main.SQLConnections;
-import Main.showMessage;
+import Main.*;
 
 import javax.mail.MessagingException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
@@ -71,19 +71,24 @@ public class SignUp extends JFrame{
                     details.put("email", email.getText());
                     details.put("contact",country_code.getText() + "-" + contact.getText());
                     details.put("password", MD5.getMd5(password.getText()));
+                    ResultSet rs;
                     try {
-                        SignInFunctions.addUser(con, details);
-                        String s = "Welcome " + name.getText();
-                        showMessage.message(s);
+                         SignInFunctions.addUser(con, details);
+                         rs = commandExecute.executeCommand(con,
+                                 "select * from Users order by acc_no DESC limit 1;");
+                        showMessage.message("Welcome " + name.getText());
+
                     } catch (SQLException ex) {
                         throw new RuntimeException(ex);
                     }
 
                     try {
+                        rs.next();
                         MyMail.sendEmail(email.getText(),
                                 "Welcome To ABC Bank",
-                                "Hello User! Welcome to the ABC Bank");
-                    } catch (MessagingException ex) {
+                                "Hello User! Welcome to the ABC Bank Your Account Number is: " +
+                                        rs.getString("acc_no"));
+                    } catch (MessagingException | SQLException ex) {
                         throw new RuntimeException(ex);
                     }
 

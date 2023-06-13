@@ -48,7 +48,9 @@ public class Login extends JFrame{
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String acc_no = user_id.getText();
+                String acc_no = user_id.getText() ;
+                if(acc_no.length()==0)
+                    acc_no = "-1";
                 String pass = MD5.getMd5(password.getText());
                 loginFunctions l = new loginFunctions();
                 Map<String, String> details = new HashMap<>();
