@@ -9,7 +9,7 @@ public class SQLConnections {
     public static Connection getCon() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Internship", "root", "shree_123");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Internship", "root", "<password>");
             System.out.println("Successfully connected to database!");
 
             return con;
